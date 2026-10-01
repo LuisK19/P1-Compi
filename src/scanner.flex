@@ -89,3 +89,31 @@ ESPACIOS  = [ \t\r\n]+
 "λ"             { return symbol(sym.OP_AND); }
 "θ"             { return symbol(sym.OP_OR); }
 "Σ"             { return symbol(sym.OP_NOT); }
+
+/* Simbolos especiales */
+"¿:"            { return symbol(sym.BLOQUE_ABRE);}  
+":?"            { return symbol(sym.BLOQUE_CIERRA);}
+"ʃ:"            { return symbol(sym.INDICE_ABRE);}
+":ʅ"            { return symbol(sym.INDICE_CIERRA);}
+"є:"            { return symbol(sym.PAREN_ABRE);}
+":э"            { return symbol(sym.PAREN_CIERRA);}
+"Ͱ"             { return symbol(sym.ASIGNACION);}
+"»"             { return symbol(sym.FIN_SENT);}
+","             { return symbol(sym.COMA);}
+
+/* Literales */
+
+{FLOTANTE}  { return symbol(sym.FLOTANTE, Double.parseDouble(yytext())); }
+{ENTERO}    { return symbol(sym.ENTERO, Integer.parseInt(yytext())); }
+{CADENA}    { return symbol(sym.CADENA, yytext().substring(1, yytext().length() - 1)); }
+{CARACTER}  { return symbol(sym.CARACTER, yytext().substring(1, yytext().length() - 1)); }
+
+/* Identificadores */
+
+{ID}        { return symbol(sym.ID, yytext()); }
+
+/* Error lexico */
+
+[^]     { System.err.println("Error lexico en linea " + yyline +
+              ", columna " + yycolumn +
+              ": caracter no reconocido '" + yytext() + "'"); }
