@@ -36,3 +36,11 @@ ESPACIOS  = [ \t\r\n]+
 
 /* Sección 3: Reglas léxicas */
 
+/* Espacios en blanco */
+{ESPACIOS}              { /* ignorar */ }
+
+/* Comentarios de linea: | texto hasta fin de linea */
+"|"[^\n]*               { /* ignorar */ }
+
+/* Comentarios multilinea: ! texto ! */
+"¡"[^!]*"!"             { /* ignorar */ }
