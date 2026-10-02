@@ -56,3 +56,15 @@ precedence right OP_NOT;                                /* Σ - mayor precedenci
 start with programa;
 
 /* Producciones */
+
+/* Tipos - int y float no están porque van en las declaraciones para evitar conflictos */
+tipo ::= BOOL | CHAR | STR ;
+
+/* Literales */
+literal ::= ENTERO
+          | FLOTANTE
+          | TRUE
+          | FALSE
+          | CARACTER
+          | CADENA
+          ;
