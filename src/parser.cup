@@ -1,0 +1,13 @@
+package generated;
+
+import java_cup.runtime.*;
+
+/* Terminales */
+
+/* No terminales */
+
+/* Precedencia */
+
+start with programa;
+
+/* Producciones */
