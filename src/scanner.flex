@@ -23,27 +23,32 @@ import java_cup.runtime.*;
 %}
 
 /* Macros */
-DIGITO    = [0-9]
-LETRA     = [a-zA-Z_]
-ENTERO    = {DIGITO}+
-FLOTANTE  = {DIGITO}+\.{DIGITO}+
-ID        = {LETRA}({LETRA}|{DIGITO})*
-CADENA    = \"[^\"]*\"
-CARACTER  = \'[^\']\'
-ESPACIOS  = [ \t\r\n]+
+DIG             = [0-9]
+DIGN            = [1-9]
+CERO            = "0"
+
+PARTE_ENTERA    = {DIGN}{DIG}*
+PARTE_FLOTANTE  = {DIG}*{DIGN}
+
+ENTERO          = {CERO} | {PARTE_ENTERA}
+FLOTANTE        = ({CERO}\.{CERO}) | ({CERO}\.{PARTE_FLOTANTE}) | ({PARTE_ENTERA}\.{PARTE_FLOTANTE})
+
+ID              = [a-zA-Z_][a-zA-Z0-9_]*
+CADENA          = \"[^\"]*\"
+CARACTER        = \'[^\']\'
+ESPACIOS        = [ \t\r\n]+
+
+COMENTARIO_LINEA = "|"[^\n]* 
+COMENTARIO_MULTILINEA = "¡"[^!]*"!"
 
 %%
 
 /* Sección 3: Reglas léxicas */
 
 /* Espacios en blanco */
-{ESPACIOS}              { /* ignorar */ }
-
-/* Comentarios de linea: | texto hasta fin de linea */
-"|"[^\n]*               { /* ignorar */ }
-
-/* Comentarios multilinea: ! texto ! */
-"¡"[^!]*"!"             { /* ignorar */ }
+{ESPACIOS}                         { /* ignorar */ }
+{COMENTARIO_LINEA}                 { /* ignorar */ }
+{COMENTARIO_MULTILINEA}            { /* ignorar */ }
 
 /* Palabras reservadas */
 "val"           { return symbol(sym.VAL); }
