@@ -4,9 +4,54 @@ import java_cup.runtime.*;
 
 /* Terminales */
 
+terminal VAL, VOID, PRINCIPAL;
+terminal IF, ELIF, ELSE, WHILE, FOR;
+terminal RETURN, BREAK, WRITE, READ;
+terminal TRUE, FALSE;
+terminal INT, FLOAT, BOOL, CHAR, STR;
+terminal Integer  ENTERO;
+terminal Double   FLOTANTE;
+terminal String   CADENA, CARACTER, ID;
+terminal OP_SUMA, OP_RESTA, OP_MULT, OP_DIV, OP_DIV_ENT, OP_MOD, OP_POT;
+terminal OP_INC, OP_DEC;
+terminal OP_MENOR, OP_MAYOR, OP_MENIG, OP_MAYIG, OP_IGUAL, OP_DIFER;
+terminal OP_AND, OP_OR, OP_NOT;
+terminal BLOQUE_ABRE, BLOQUE_CIERRA;
+terminal INDICE_ABRE, INDICE_CIERRA;
+terminal PAREN_ABRE, PAREN_CIERRA;
+terminal ASIGNACION, FIN_SENT, COMA;
+
 /* No terminales */
 
+non terminal programa, globalesOpc, funcionesOpc;
+non terminal declaracion, declaracionList;
+non terminal literalListInt, literalListFloat;
+non terminal tipo, literal;
+non terminal expresion, exprArit, term, factor, potencia, atomo;
+non terminal negativo, unarioSuma, unarioResta;
+non terminal accesoList, llamadaFun, args;
+non terminal exprRel, opRel, exprLog, opLog;
+non terminal sentencia, asignacion;
+non terminal bloque, lineaBloque, estructuraControl;
+non terminal condicion, condicionFor;
+non terminal ifSent, elifOpc, elseOpc, elif, elseSent;
+non terminal whileSent, forSent;
+non terminal returnSent, breakSent;
+non terminal write, read, paramWrite;
+non terminal funcion, params, paramFun;
+non terminal principal;
+
 /* Precedencia */
+
+precedence left OP_OR;                                  /* θ - menor precedencia */
+precedence left OP_AND;                                 /* λ */
+precedence left OP_IGUAL, OP_DIFER;                     /* == != */
+precedence left OP_MENOR, OP_MAYOR, OP_MENIG, OP_MAYIG; /* < > <= >= */
+precedence left OP_SUMA, OP_RESTA;                      /* + - */
+precedence left OP_MULT, OP_DIV, OP_DIV_ENT;            /* * / // */
+precedence left OP_MOD;                                 /* % */
+precedence right OP_POT;                                /* ^ */
+precedence right OP_NOT;                                /* Σ - mayor precedencia */
 
 start with programa;
 
