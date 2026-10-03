@@ -3,6 +3,19 @@
         "."
     ],
     "java.project.outputPath": "out",
+    "java.project.resourceFilters": [
+        "node_modules",
+        "\\.git",
+        "\\.vscode",
+        "documentacion",
+        "tests",
+        "README\\.md$",
+        "\\.gitignore$",
+        ".*\\.flex$",
+        ".*\\.cup$",
+        "tokens_.*\\.(csv|txt)$",
+        "tools[/\\\\].*\\.jar$"
+    ],
     "java.project.referencedLibraries": [
         "lib/**/*.jar",
         "tools/java-cup-11b.jar",

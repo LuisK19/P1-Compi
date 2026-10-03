@@ -44,6 +44,9 @@ ENTERO          = {CERO} | {PARTE_ENTERA}
 FLOTANTE        = ({CERO}\.{CERO}) | ({CERO}\.{PARTE_FLOTANTE}) | ({PARTE_ENTERA}\.{PARTE_FLOTANTE})
 
 ID              = [a-zA-Z_][a-zA-Z0-9_]*
+
+ID_INVALIDO = [0-9]+{ID}
+
 CADENA          = \"[^\"]*\"
 CARACTER        = \'[^\']\'
 ESPACIOS        = [ \t\r\n]+
@@ -128,6 +131,16 @@ COMENTARIO_MULTILINEA = "¡"[^!]*"!"
 {ID}        { return symbol(sym.ID, yytext()); }
 
 /* Error lexico */
+
+
+{ID_INVALIDO} {
+              huboErroresLexicos = true;
+              erroresLexicos.append("Error lexico en linea ").append(yyline + 1)
+                  .append(", columna ").append(yycolumn + 1)
+                  .append(": identificador no puede comenzar con un digito '")
+                  .append(yytext()).append("'")
+                  .append(System.lineSeparator());
+            }
 
 [^]     { huboErroresLexicos = true;
               erroresLexicos.append("Error lexico en linea ").append(yyline + 1)
