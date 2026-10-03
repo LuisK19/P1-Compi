@@ -2,6 +2,7 @@ package src;
 
 import java.io.File;
 import java.io.IOException;
+import java.nio.file.Files;
 
 public class GeneradorAnalizadores {
 
@@ -11,8 +12,15 @@ public class GeneradorAnalizadores {
             throw new IOException("No se pudo crear la carpeta generated.");
         }
 
+        eliminarArchivosAnteriores(carpetaGenerada);
         generarLexer(rutaLexer, carpetaGenerada.getPath());
         generarParser(rutaParser, carpetaGenerada.getPath());
+    }
+
+    private void eliminarArchivosAnteriores(File carpetaGenerada) throws IOException {
+        Files.deleteIfExists(new File(carpetaGenerada, "Lexer.java").toPath());
+        Files.deleteIfExists(new File(carpetaGenerada, "Parser.java").toPath());
+        Files.deleteIfExists(new File(carpetaGenerada, "sym.java").toPath());
     }
 
     private void generarLexer(String ruta, String destino) throws Exception {
