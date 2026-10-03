@@ -4,12 +4,14 @@ import java_cup.runtime.*;
 
 parser code {:
     Lexer analizadorLexico;
+    private boolean huboErroresSintacticos = false;
 
-    public parser(Lexer analizadorLexico) {
+    public Parser(Lexer analizadorLexico) {
         this.analizadorLexico = analizadorLexico;
     }
 
     public void report_error(String mensaje, Object infoAdicional) {
+        huboErroresSintacticos = true;
         String textoError = "Error de sintaxis";
         
         if (infoAdicional instanceof java_cup.runtime.Symbol) {
@@ -32,12 +34,16 @@ parser code {:
         System.err.println(textoError);
     }
 
+    public boolean huboErroresSintacticos() {
+        return huboErroresSintacticos;
+    }
+
     public void report_fatal_error(String mensaje, Object infoAdicional) {
         report_error("ERROR FATAL: " + mensaje, infoAdicional);
     }
 :};
 
-scan with {: return lexer.next_token(); :};
+scan with {: return analizadorLexico.next_token(); :};
 /* Terminales*/
 
 /* Palabras Reservadas */

@@ -1,0 +1,5 @@
+out/
+*.class
+tokens_encontrados.txt
+tokens_*.csv
+generated/*~
