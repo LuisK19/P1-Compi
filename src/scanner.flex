@@ -1,4 +1,3 @@
-/* Sección 1: Imports y opciones */
 package generated;
 
 import java_cup.runtime.*;
@@ -51,60 +50,60 @@ COMENTARIO_MULTILINEA = "¡"[^!]*"!"
 {COMENTARIO_MULTILINEA}            { /* ignorar */ }
 
 /* Palabras reservadas */
-"val"           { return symbol(sym.VAL); }
-"int"           { return symbol(sym.INT); }
-"float"         { return symbol(sym.FLOAT); }
-"bool"          { return symbol(sym.BOOL); }
-"char"          { return symbol(sym.CHAR); }
-"str"           { return symbol(sym.STR); }
-"true"          { return symbol(sym.TRUE); }
-"false"         { return symbol(sym.FALSE); }
-"if"            { return symbol(sym.IF); }
-"elif"          { return symbol(sym.ELIF); }
-"else"          { return symbol(sym.ELSE); }
-"while"         { return symbol(sym.WHILE); }
-"for"           { return symbol(sym.FOR); }
-"return"        { return symbol(sym.RETURN); }
-"break"         { return symbol(sym.BREAK); }
-"write"         { return symbol(sym.WRITE); }
-"read"          { return symbol(sym.READ); }
-"void"          { return symbol(sym.VOID); }
-"principal"     { return symbol(sym.PRINCIPAL); }
+"val"           { return symbol(sym.VAL, yytext()); }
+"int"           { return symbol(sym.INT, yytext()); }
+"float"         { return symbol(sym.FLOAT, yytext()); }
+"bool"          { return symbol(sym.BOOL, yytext()); }
+"char"          { return symbol(sym.CHAR, yytext()); }
+"str"           { return symbol(sym.STR, yytext()); }
+"true"          { return symbol(sym.TRUE, yytext()); }
+"false"         { return symbol(sym.FALSE, yytext()); }
+"if"            { return symbol(sym.IF, yytext()); }
+"elif"          { return symbol(sym.ELIF, yytext()); }
+"else"          { return symbol(sym.ELSE, yytext()); }
+"while"         { return symbol(sym.WHILE, yytext()); }
+"for"           { return symbol(sym.FOR, yytext()); }
+"return"        { return symbol(sym.RETURN, yytext()); }
+"break"         { return symbol(sym.BREAK, yytext()); }
+"write"         { return symbol(sym.WRITE, yytext()); }
+"read"          { return symbol(sym.READ, yytext()); }
+"void"          { return symbol(sym.VOID, yytext()); }
+"principal"     { return symbol(sym.PRINCIPAL, yytext()); }
 
 /* Operadores aritméticos */
-"++"            { return symbol(sym.OP_INC); }
-"--"            { return symbol(sym.OP_DEC); }
-"+"             { return symbol(sym.OP_SUMA); }
-"-"             { return symbol(sym.OP_RESTA); }
-"*"             { return symbol(sym.OP_MULT); }
-"//"            { return symbol(sym.OP_DIV_ENT); }
-"/"             { return symbol(sym.OP_DIV); }
-"%"             { return symbol(sym.OP_MOD); }
-"^"             { return symbol(sym.OP_POT); }
+"++"            { return symbol(sym.OP_INC, yytext()); }
+"--"            { return symbol(sym.OP_DEC, yytext()); }
+"+"             { return symbol(sym.OP_SUMA, yytext()); }
+"-"             { return symbol(sym.OP_RESTA, yytext()); }
+"*"             { return symbol(sym.OP_MULT, yytext()); }
+"//"            { return symbol(sym.OP_DIV_ENT, yytext()); }
+"/"             { return symbol(sym.OP_DIV, yytext()); }
+"%"             { return symbol(sym.OP_MOD, yytext()); }
+"^"             { return symbol(sym.OP_POT, yytext()); }
 
 /* Operadores relacionales */
-"<="            { return symbol(sym.OP_MENIG); }
-">="            { return symbol(sym.OP_MAYIG); }
-"=="            { return symbol(sym.OP_IGUAL); }
-"!="            { return symbol(sym.OP_DIFER); }
-"<"             { return symbol(sym.OP_MENOR); }
-">"             { return symbol(sym.OP_MAYOR); }
+"<="            { return symbol(sym.OP_MENIG, yytext()); }
+">="            { return symbol(sym.OP_MAYIG, yytext()); }
+"=="            { return symbol(sym.OP_IGUAL, yytext()); }
+"!="            { return symbol(sym.OP_DIFER, yytext()); }
+"<"             { return symbol(sym.OP_MENOR, yytext()); }
+">"             { return symbol(sym.OP_MAYOR, yytext()); }
 
 /* Operadores logicos */
-"λ"             { return symbol(sym.OP_AND); }
-"θ"             { return symbol(sym.OP_OR); }
-"Σ"             { return symbol(sym.OP_NOT); }
+"λ"             { return symbol(sym.OP_AND, yytext()); }
+"θ"             { return symbol(sym.OP_OR, yytext()); }
+"Σ"             { return symbol(sym.OP_NOT, yytext()); }
 
 /* Simbolos especiales */
-"¿:"            { return symbol(sym.BLOQUE_ABRE);}  
-":?"            { return symbol(sym.BLOQUE_CIERRA);}
-"ʃ:"            { return symbol(sym.INDICE_ABRE);}
-":ʅ"            { return symbol(sym.INDICE_CIERRA);}
-"є:"            { return symbol(sym.PAREN_ABRE);}
-":э"            { return symbol(sym.PAREN_CIERRA);}
-"Ͱ"             { return symbol(sym.ASIGNACION);}
-"»"             { return symbol(sym.FIN_SENT);}
-","             { return symbol(sym.COMA);}
+"¿:"            { return symbol(sym.BLOQUE_ABRE, yytext());}  
+":?"            { return symbol(sym.BLOQUE_CIERRA, yytext());}
+"ʃ:"            { return symbol(sym.INDICE_ABRE, yytext());}
+":ʅ"            { return symbol(sym.INDICE_CIERRA, yytext());}
+"є:"            { return symbol(sym.PAREN_ABRE, yytext());}
+":э"            { return symbol(sym.PAREN_CIERRA, yytext());}
+"Ͱ"             { return symbol(sym.ASIGNACION, yytext());}
+"»"             { return symbol(sym.FIN_SENT, yytext());}
+","             { return symbol(sym.COMA, yytext());}
 
 /* Literales */
 
@@ -122,3 +121,12 @@ COMENTARIO_MULTILINEA = "¡"[^!]*"!"
 [^]     { System.err.println("Error lexico en linea " + yyline +
               ", columna " + yycolumn +
               ": caracter no reconocido '" + yytext() + "'"); }
+=========================================
+{
+    "java.project.referencedLibraries": [
+        "lib/**/*.jar",
+        "tools/java-cup-11b.jar",
+        "tools/jflex-full-1.9.1.jar",
+        "tools/java-cup-11b-runtime.jar"
+    ]
+}
