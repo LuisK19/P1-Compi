@@ -3,28 +3,37 @@ package generated;
 import java_cup.runtime.*;
 
 parser code {:
-    Lexer lexer;
+    Lexer analizadorLexico;
 
-    public parser(Lexer lexer) {
-        this.lexer = lexer;
+    public parser(Lexer analizadorLexico) {
+        this.analizadorLexico = analizadorLexico;
     }
 
-    public void report_error(String message, Object info) {
-        StringBuilder m = new StringBuilder("Error de sintaxis");
-        if (info instanceof java_cup.runtime.Symbol) {
-            java_cup.runtime.Symbol s = ((java_cup.runtime.Symbol) info);
-            if (s.left >= 0) {
-                m.append(" en linea ").append(s.left);
-                if (s.right >= 0)
-                    m.append(", columna ").append(s.right);
+    public void report_error(String mensaje, Object infoAdicional) {
+        String textoError = "Error de sintaxis";
+        
+        if (infoAdicional instanceof java_cup.runtime.Symbol) {
+            java_cup.runtime.Symbol token = (java_cup.runtime.Symbol) infoAdicional;
+            
+            if (token.left >= 0) {
+                textoError += " en la linea " + (token.left + 1); 
+                
+                if (token.right >= 0) {
+                    textoError += ", columna " + (token.right + 1);
+                }
+            }
+            
+            if (token.value != null) {
+                textoError += " [Lexema problematico: '" + token.value + "']";
             }
         }
-        m.append(" : ").append(message);
-        System.err.println(m);
+        
+        textoError += " ==> " + mensaje;
+        System.err.println(textoError);
     }
 
-    public void report_fatal_error(String message, Object info) {
-        report_error(message, info);
+    public void report_fatal_error(String mensaje, Object infoAdicional) {
+        report_error("ERROR FATAL: " + mensaje, infoAdicional);
     }
 :};
 
@@ -259,4 +268,4 @@ funcionesOpc ::= funcion funcionesOpc
              |
              ;
 
-programa ::= globalesOpc funcionesOpc principal ;
+programa ::= globalesOpc funcionesOpc principal;
