@@ -13,11 +13,22 @@ import java_cup.runtime.*;
 %public
 
 %{
+    private boolean huboErroresLexicos = false;
+    private StringBuilder erroresLexicos = new StringBuilder();
+
     private Symbol symbol(int type) {
-        return new Symbol(type, yyline + 1, yycolumn + 1);
+        return new Symbol(type, yyline, yycolumn);
     }
     private Symbol symbol(int type, Object value) {
-        return new Symbol(type, yyline + 1, yycolumn + 1, value);
+        return new Symbol(type, yyline, yycolumn, value);
+    }
+
+    public boolean huboErroresLexicos() {
+        return huboErroresLexicos;
+    }
+
+    public String obtenerErroresLexicos() {
+        return erroresLexicos.toString();
     }
 %}
 
@@ -33,6 +44,9 @@ ENTERO          = {CERO} | {PARTE_ENTERA}
 FLOTANTE        = ({CERO}\.{CERO}) | ({CERO}\.{PARTE_FLOTANTE}) | ({PARTE_ENTERA}\.{PARTE_FLOTANTE})
 
 ID              = [a-zA-Z_][a-zA-Z0-9_]*
+
+ID_INVALIDO = [0-9]+{ID}
+
 CADENA          = \"[^\"]*\"
 CARACTER        = \'[^\']\'
 ESPACIOS        = [ \t\r\n]+
@@ -118,15 +132,18 @@ COMENTARIO_MULTILINEA = "¡"[^!]*"!"
 
 /* Error lexico */
 
-[^]     { System.err.println("Error lexico en linea " + yyline +
-              ", columna " + yycolumn +
-              ": caracter no reconocido '" + yytext() + "'"); }
-=========================================
-{
-    "java.project.referencedLibraries": [
-        "lib/**/*.jar",
-        "tools/java-cup-11b.jar",
-        "tools/jflex-full-1.9.1.jar",
-        "tools/java-cup-11b-runtime.jar"
-    ]
-}
+
+{ID_INVALIDO} {
+              huboErroresLexicos = true;
+              erroresLexicos.append("Error lexico en linea ").append(yyline + 1)
+                  .append(", columna ").append(yycolumn + 1)
+                  .append(": identificador no puede comenzar con un digito '")
+                  .append(yytext()).append("'")
+                  .append(System.lineSeparator());
+            }
+
+[^]     { huboErroresLexicos = true;
+              erroresLexicos.append("Error lexico en linea ").append(yyline + 1)
+                  .append(", columna ").append(yycolumn + 1)
+                  .append(": caracter no reconocido '").append(yytext()).append("'")
+                  .append(System.lineSeparator()); }

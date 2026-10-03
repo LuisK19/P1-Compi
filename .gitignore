@@ -1,0 +1,8 @@
+out/
+*.class
+tokens_encontrados.txt
+tokens_*.csv
+generated/Lexer.java
+generated/Parser.java
+generated/sym.java
+tests/*.txt
