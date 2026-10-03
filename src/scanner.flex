@@ -1,87 +1,132 @@
-    /* JFlex example: partial Java language lexer specification */
-    import java_cup.runtime.*;
+package generated;
 
-    /**
-     * This class is a simple example lexer.
-     */
-    %%
+import java_cup.runtime.*;
 
-    %class Lexer
-    %unicode
-    %cup
-    %line
-    %column
+%%
 
-    %{
-      StringBuffer string = new StringBuffer();
+/* Sección 2: Configuración del Lexer */
+%class Lexer
+%unicode
+%cup
+%line
+%column
+%public
 
-      private Symbol symbol(int type) {
-        return new Symbol(type, yyline, yycolumn);
-      }
-      private Symbol symbol(int type, Object value) {
-        return new Symbol(type, yyline, yycolumn, value);
-      }
-    %}
-
-    LineTerminator = \r|\n|\r\n
-    InputCharacter = [^\r\n]
-    WhiteSpace     = {LineTerminator} | [ \t\f]
-
-    /* comments */
-    Comment = {TraditionalComment} | {EndOfLineComment} | {DocumentationComment}
-
-    TraditionalComment   = "/*" [^*] ~"*/" | "/*" "*"+ "/"
-    // Comment can be the last line of the file, without line terminator.
-    EndOfLineComment     = "//" {InputCharacter}* {LineTerminator}?
-    DocumentationComment = "/**" {CommentContent} "*"+ "/"
-    CommentContent       = ( [^*] | \*+ [^/*] )*
-
-    Identifier = [:jletter:] [:jletterdigit:]*
-
-    DecIntegerLiteral = 0 | [1-9][0-9]*
-
-    %state STRING
-
-    %%
-
-    /* keywords */
-    <YYINITIAL> "abstract"           { return symbol(sym.ABSTRACT); }
-    <YYINITIAL> "boolean"            { return symbol(sym.BOOLEAN); }
-    <YYINITIAL> "break"              { return symbol(sym.BREAK); }
-
-    <YYINITIAL> {
-      /* identifiers */ 
-      {Identifier}                   { return symbol(sym.IDENTIFIER); }
-     
-      /* literals */
-      {DecIntegerLiteral}            { return symbol(sym.INTEGER_LITERAL); }
-      \"                             { string.setLength(0); yybegin(STRING); }
-
-      /* operators */
-      "="                            { return symbol(sym.EQ); }
-      "=="                           { return symbol(sym.EQEQ); }
-      "+"                            { return symbol(sym.PLUS); }
-
-      /* comments */
-      {Comment}                      { /* ignore */ }
-     
-      /* whitespace */
-      {WhiteSpace}                   { /* ignore */ }
+%{
+    private Symbol symbol(int type) {
+        return new Symbol(type, yyline + 1, yycolumn + 1);
     }
-
-    <STRING> {
-      \"                             { yybegin(YYINITIAL); 
-                                       return symbol(sym.STRING_LITERAL, 
-                                       string.toString()); }
-      [^\n\r\"\\]+                   { string.append( yytext() ); }
-      \\t                            { string.append('\t'); }
-      \\n                            { string.append('\n'); }
-
-      \\r                            { string.append('\r'); }
-      \\\"                           { string.append('\"'); }
-      \\                             { string.append('\\'); }
+    private Symbol symbol(int type, Object value) {
+        return new Symbol(type, yyline + 1, yycolumn + 1, value);
     }
+%}
 
-    /* error fallback */
-    [^]                              { throw new Error("Illegal character <"+
-                                                        yytext()+">"); }
+/* Macros */
+DIG             = [0-9]
+DIGN            = [1-9]
+CERO            = "0"
+
+PARTE_ENTERA    = {DIGN}{DIG}*
+PARTE_FLOTANTE  = {DIG}*{DIGN}
+
+ENTERO          = {CERO} | {PARTE_ENTERA}
+FLOTANTE        = ({CERO}\.{CERO}) | ({CERO}\.{PARTE_FLOTANTE}) | ({PARTE_ENTERA}\.{PARTE_FLOTANTE})
+
+ID              = [a-zA-Z_][a-zA-Z0-9_]*
+CADENA          = \"[^\"]*\"
+CARACTER        = \'[^\']\'
+ESPACIOS        = [ \t\r\n]+
+
+COMENTARIO_LINEA = "|"[^\n]* 
+COMENTARIO_MULTILINEA = "¡"[^!]*"!"
+
+%%
+
+/* Sección 3: Reglas léxicas */
+
+/* Espacios en blanco */
+{ESPACIOS}                         { /* ignorar */ }
+{COMENTARIO_LINEA}                 { /* ignorar */ }
+{COMENTARIO_MULTILINEA}            { /* ignorar */ }
+
+/* Palabras reservadas */
+"val"           { return symbol(sym.VAL, yytext()); }
+"int"           { return symbol(sym.INT, yytext()); }
+"float"         { return symbol(sym.FLOAT, yytext()); }
+"bool"          { return symbol(sym.BOOL, yytext()); }
+"char"          { return symbol(sym.CHAR, yytext()); }
+"str"           { return symbol(sym.STR, yytext()); }
+"true"          { return symbol(sym.TRUE, yytext()); }
+"false"         { return symbol(sym.FALSE, yytext()); }
+"if"            { return symbol(sym.IF, yytext()); }
+"elif"          { return symbol(sym.ELIF, yytext()); }
+"else"          { return symbol(sym.ELSE, yytext()); }
+"while"         { return symbol(sym.WHILE, yytext()); }
+"for"           { return symbol(sym.FOR, yytext()); }
+"return"        { return symbol(sym.RETURN, yytext()); }
+"break"         { return symbol(sym.BREAK, yytext()); }
+"write"         { return symbol(sym.WRITE, yytext()); }
+"read"          { return symbol(sym.READ, yytext()); }
+"void"          { return symbol(sym.VOID, yytext()); }
+"principal"     { return symbol(sym.PRINCIPAL, yytext()); }
+
+/* Operadores aritméticos */
+"++"            { return symbol(sym.OP_INC, yytext()); }
+"--"            { return symbol(sym.OP_DEC, yytext()); }
+"+"             { return symbol(sym.OP_SUMA, yytext()); }
+"-"             { return symbol(sym.OP_RESTA, yytext()); }
+"*"             { return symbol(sym.OP_MULT, yytext()); }
+"//"            { return symbol(sym.OP_DIV_ENT, yytext()); }
+"/"             { return symbol(sym.OP_DIV, yytext()); }
+"%"             { return symbol(sym.OP_MOD, yytext()); }
+"^"             { return symbol(sym.OP_POT, yytext()); }
+
+/* Operadores relacionales */
+"<="            { return symbol(sym.OP_MENIG, yytext()); }
+">="            { return symbol(sym.OP_MAYIG, yytext()); }
+"=="            { return symbol(sym.OP_IGUAL, yytext()); }
+"!="            { return symbol(sym.OP_DIFER, yytext()); }
+"<"             { return symbol(sym.OP_MENOR, yytext()); }
+">"             { return symbol(sym.OP_MAYOR, yytext()); }
+
+/* Operadores logicos */
+"λ"             { return symbol(sym.OP_AND, yytext()); }
+"θ"             { return symbol(sym.OP_OR, yytext()); }
+"Σ"             { return symbol(sym.OP_NOT, yytext()); }
+
+/* Simbolos especiales */
+"¿:"            { return symbol(sym.BLOQUE_ABRE, yytext());}  
+":?"            { return symbol(sym.BLOQUE_CIERRA, yytext());}
+"ʃ:"            { return symbol(sym.INDICE_ABRE, yytext());}
+":ʅ"            { return symbol(sym.INDICE_CIERRA, yytext());}
+"є:"            { return symbol(sym.PAREN_ABRE, yytext());}
+":э"            { return symbol(sym.PAREN_CIERRA, yytext());}
+"Ͱ"             { return symbol(sym.ASIGNACION, yytext());}
+"»"             { return symbol(sym.FIN_SENT, yytext());}
+","             { return symbol(sym.COMA, yytext());}
+
+/* Literales */
+
+{FLOTANTE}  { return symbol(sym.FLOTANTE, Double.parseDouble(yytext())); }
+{ENTERO}    { return symbol(sym.ENTERO, Integer.parseInt(yytext())); }
+{CADENA}    { return symbol(sym.CADENA, yytext().substring(1, yytext().length() - 1)); }
+{CARACTER}  { return symbol(sym.CARACTER, yytext().substring(1, yytext().length() - 1)); }
+
+/* Identificadores */
+
+{ID}        { return symbol(sym.ID, yytext()); }
+
+/* Error lexico */
+
+[^]     { System.err.println("Error lexico en linea " + yyline +
+              ", columna " + yycolumn +
+              ": caracter no reconocido '" + yytext() + "'"); }
+=========================================
+{
+    "java.project.referencedLibraries": [
+        "lib/**/*.jar",
+        "tools/java-cup-11b.jar",
+        "tools/jflex-full-1.9.1.jar",
+        "tools/java-cup-11b-runtime.jar"
+    ]
+}
