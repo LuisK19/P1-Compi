@@ -116,5 +116,4 @@ void principal ¿:
 
 - Los archivos generados (`Lexer.java`, `sym.java`, `Parser.java`) **no** se editan a mano;
   siempre se regeneran desde `scanner.flex` y `parser.cup`.
-- Si algún `.jar` cambia de versión, actualiza también los comandos de este README.
 
