@@ -2,6 +2,9 @@ package generated;
 
 import java_cup.runtime.*;
 
+/* Código auxiliar del parser: conserva el lexer como fuente de tokens y adapta
+ * los errores de CUP para incluir ubicación y lexema 
+ */
 parser code {:
     Lexer analizadorLexico;
     private boolean huboErroresSintacticos = false;
@@ -46,11 +49,11 @@ parser code {:
 scan with {: return analizadorLexico.next_token(); :};
 /* Terminales*/
 
-/* Palabras Reservadas */
+/* Palabras reservadas y tipos de dato. */
 terminal VAL, INT, FLOAT, BOOL, CHAR, STR, TRUE, FALSE;
 terminal IF, ELIF, ELSE, WHILE, FOR, RETURN, BREAK, WRITE, READ, VOID, PRINCIPAL;
 
-/* Operadores Aritmeticos y Unarios */
+/* Operadores aritméticos, unarios, relacionales y lógicos. */
 terminal OP_SUMA, OP_RESTA, OP_MULT, OP_DIV, OP_DIV_ENT, OP_MOD, OP_POT;
 terminal OP_INC, OP_DEC;
 
@@ -88,7 +91,7 @@ non terminal identificador, tipo, literal, literalInt, literalFloat, literalBool
 /* Simbolo inicial */
 start with programa;
 
-/* Producciones */
+/* Producciones para identificadores, tipos y valores literales. */
 
 identificador ::= ID ;
 

@@ -4,7 +4,7 @@ import java_cup.runtime.*;
 
 %%
 
-/* Sección 2: Configuración del Lexer */
+/* Configuración del lexer generado y metadatos de posición para CUP. */
 %class Lexer
 %unicode
 %cup
@@ -13,6 +13,7 @@ import java_cup.runtime.*;
 %public
 
 %{
+    // Construye símbolos CUP con la ubicación actual, conservada en base cero.
     private boolean huboErroresLexicos = false;
     private StringBuilder erroresLexicos = new StringBuilder();
 
