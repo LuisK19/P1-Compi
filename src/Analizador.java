@@ -12,8 +12,22 @@ import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 
+/**
+ * Ejecuta el análisis léxico y sintáctico de un archivo fuente.
+ *
+ * <p>También genera un reporte CSV con los tokens encontrados durante el
+ * análisis léxico.
+ */
 public class Analizador {
 
+    /**
+     * Inicia el análisis usando las rutas indicadas en los argumentos.
+     *
+     * <p>El primer argumento es el archivo de entrada y el segundo es la ruta
+     * del reporte CSV. Si no se proporcionan, se usan rutas predeterminadas.
+     *
+     * @param args rutas opcionales del archivo de entrada y del reporte CSV
+     */
     public static void main(String[] args) {
         String archivoEntrada = args.length > 0 ? args[0] : "tests\\error_lexico.txt";
         String archivoSalidaTokens = args.length > 1 ? args[1] : "tokens_encontrados.csv";
@@ -34,6 +48,17 @@ public class Analizador {
         ejecutarAnalisisSintactico(archivoEntrada);
     }
 
+    /**
+     * Genera un CSV con los tokens léxicos del archivo de entrada.
+     *
+     * <p>Los errores léxicos se registran en la salida de errores y no impiden
+     * generar el reporte con los demás tokens reconocidos.
+     *
+     * @param rutaEntrada ruta del archivo fuente que se analizará
+     * @param rutaSalida ruta del archivo CSV que se creará
+     * @return {@code true} si se pudo leer la entrada y escribir el CSV;
+     *     {@code false} si ocurrió un error de lectura o escritura
+     */
     public static boolean generarArchivoDeTokens(String rutaEntrada, String rutaSalida) {
         try (BufferedReader lector = Files.newBufferedReader(Path.of(rutaEntrada), StandardCharsets.UTF_8);
                 BufferedWriter escritor = Files.newBufferedWriter(Path.of(rutaSalida), StandardCharsets.UTF_8)) {
@@ -69,6 +94,12 @@ public class Analizador {
         }
     }
 
+    /**
+     * Devuelve la categoría general asociada con el identificador de token.
+     *
+     * @param idToken identificador definido por CUP
+     * @return nombre de la categoría del token
+     */
     private static String clasificarToken(int idToken) {
         switch (idToken) {
             case sym.VAL:
@@ -143,6 +174,12 @@ public class Analizador {
         }
     }
 
+    /**
+     * Indica la tabla conceptual a la que pertenece el valor del token.
+     *
+     * @param idToken identificador definido por CUP
+     * @return nombre de la tabla o {@code "No aplica"}
+     */
     private static String tablaToken(int idToken) {
         switch (idToken) {
             case sym.ID:
@@ -159,10 +196,21 @@ public class Analizador {
         }
     }
 
+    /**
+     * Escapa un valor para incluirlo como campo entre comillas en un CSV.
+     *
+     * @param valor texto que se escribirá en el campo
+     * @return texto entre comillas, con las comillas internas duplicadas
+     */
     private static String escaparCampoCsv(String valor) {
         return "\"" + valor.replace("\"", "\"\"") + "\"";
     }
 
+    /**
+     * Ejecuta el parser y comunica si la entrada cumple la gramática.
+     *
+     * @param rutaEntrada ruta del archivo fuente que se analizará
+     */
     public static void ejecutarAnalisisSintactico(String rutaEntrada) {
         try (BufferedReader lector = Files.newBufferedReader(Path.of(rutaEntrada), StandardCharsets.UTF_8)) {
             Lexer analizadorLexico = new Lexer(lector);
